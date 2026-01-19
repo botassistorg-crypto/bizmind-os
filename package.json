@@ -15,8 +15,8 @@
     "dexie-react-hooks": "^1.1.7",
     "@google/genai": "^0.1.1",
     "phosphor-react": "^1.4.1",
-    "react-apexcharts": "^1.4.1",
-    "apexcharts": "^3.45.0"
+    "react-apexcharts": "^1.7.0",
+    "apexcharts": "^4.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
