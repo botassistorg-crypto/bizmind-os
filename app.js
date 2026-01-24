@@ -2926,27 +2926,58 @@ window.runPayroll = async function() {
 }
 // APP STARTUP
 document.addEventListener('DOMContentLoaded', async () => {
-    const session = await db.settings.get('user_session');
     
-    if (session && session.value) {
-        // 1. Set State from Local Storage FIRST
-        AppState.userTier = session.value.tier; 
-        console.log("Local Tier Loaded:", AppState.userTier);
+    // Get loader and app elements
+    const loader = document.getElementById('initial-loader');
+    const appContent = document.getElementById('app-content');
+    const appHeader = document.getElementById('app-header');
+    
+    try {
+        const session = await db.settings.get('user_session');
+        
+        if (session && session.value) {
+            // ✅ USER IS LOGGED IN
+            
+            // 1. Set State from Local Storage FIRST
+            AppState.userTier = session.value.tier; 
+            console.log("Local Tier Loaded:", AppState.userTier);
 
-        // 2. Load App
-        router('dashboard');
-        
-        // 3. FORCE RE-VALIDATE ONLINE (To catch downgrades)
-        if(navigator.onLine) {
-            validateSession(session.value);
+            // 2. Hide loader, Show app
+            if (loader) loader.style.display = 'none';
+            if (appContent) appContent.style.display = 'block';
+            if (appHeader) appHeader.style.display = 'flex';
+            document.body.style.backgroundColor = '#f8fafc';
+            
+            // 3. Load App
+            router('dashboard');
+            
+            // 4. FORCE RE-VALIDATE ONLINE (To catch downgrades)
+            if (navigator.onLine) {
+                validateSession(session.value);
+            }
+            
+            // 5. Initialize Floating Menu
+            if (typeof FloatingMenu !== 'undefined') {
+                FloatingMenu.init();
+            }
+            
+        } else {
+            // ❌ USER IS NOT LOGGED IN
+            
+            // Hide loader, Show login
+            if (loader) loader.style.display = 'none';
+            if (appContent) appContent.style.display = 'block';
+            
+            // Show login screen
+            showLoginScreen();
         }
         
-        // 4. Initialize Floating Menu
-        if (typeof FloatingMenu !== 'undefined') {
-            FloatingMenu.init();
-        }
+    } catch (error) {
+        console.error('Startup error:', error);
         
-    } else {
+        // On error, show login screen
+        if (loader) loader.style.display = 'none';
+        if (appContent) appContent.style.display = 'block';
         showLoginScreen();
     }
 });
