@@ -148,7 +148,7 @@ function showUpgradePrompt(featureName, requiredTier = 'GROWTH') {
             </div>
             
             <div class="mt-6 space-y-3">
-                <a href="https://wa.me/8801700524647?text=আমি%20BizMind%20${actualTier}%20Plan%20নিতে%20চাই" 
+                <a href="https://wa.me/8801700524647?text=আমি%20Munafa Zen%20${actualTier}%20Plan%20নিতে%20চাই" 
                    target="_blank"
                    class="flex items-center justify-center gap-2 w-full ${actualTier === 'ELITE' ? 'bg-gradient-to-r from-amber-500 to-orange-600' : 'bg-gradient-to-r from-purple-500 to-indigo-600'} text-white py-3 rounded-xl font-bold hover:opacity-90 transition">
                     <i class="ph-bold ph-whatsapp-logo text-xl"></i>
@@ -181,7 +181,7 @@ function closeUpgradeModal() {
 }
 
 function initiateUpgrade(tier) {
-    const message = `আসসালামু আলাইকুম!\n\nআমি BizMind "${tier}" প্ল্যান নিতে চাই।\n\n📱 Current Plan: ${AppState.userTier || 'N/A'}`;
+    const message = `আসসালামু আলাইকুম!\n\nআমি Munafa Zen "${tier}" প্ল্যান নিতে চাই।\n\n📱 Current Plan: ${AppState.userTier || 'N/A'}`;
     
     // Replace with your WhatsApp number
     const whatsappNumber = '01700524647';
@@ -1680,7 +1680,7 @@ async function getSettingsHTML() {
                         <i class="ph-bold ph-user text-2xl"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="font-bold">BizMind User</p>
+                        <p class="font-bold">Munafa Zen User</p>
                         <div class="flex items-center gap-2 mt-1">
                             <span class="text-xs px-2 py-0.5 rounded-full ${
                                 AppState.userTier === 'ELITE' ? 'bg-amber-500' :
@@ -1782,7 +1782,7 @@ async function getSettingsHTML() {
 
             <!-- App Version -->
             <div class="mt-4 text-center pb-4">
-                <p class="text-xs text-slate-400">BizMind v2.0</p>
+                <p class="text-xs text-slate-400">Munafa Zen v2.0</p>
                 <p class="text-[10px] text-slate-300">Made with ❤️ in Bangladesh</p>
             </div>
 
@@ -3019,7 +3019,7 @@ function showLoginScreen() {
                 <i class="ph-bold ph-rocket text-5xl text-white"></i>
             </div>
             
-            <h1 class="text-3xl font-bold text-white mb-2">BizMind</h1>
+            <h1 class="text-3xl font-bold text-white mb-2">Munafa Zen</h1>
             <p class="text-slate-400 text-sm mb-10">The Growth OS for Modern Business</p>
             
             <form onsubmit="handleLogin(event)" class="w-full max-w-xs space-y-4">
@@ -3042,7 +3042,7 @@ function showLoginScreen() {
             
             <div class="mt-8 text-center">
     <p class="text-xs text-gray-400">Don't have a key?</p>
-    <a href="https://wa.me/8801700524647?text=I%20need%20a%20BizMind%20license%20key" 
+    <a href="https://wa.me/8801700524647?text=I%20need%20a%20Munafa Zen%20license%20key" 
        target="_blank"
        class="text-sm font-bold text-green-400 hover:text-green-300 flex items-center justify-center gap-2 mt-2">
         <i class="ph ph-whatsapp-logo text-lg"></i>
@@ -3665,9 +3665,9 @@ function contactViaWhatsApp(type) {
     let message = '';
     
     if (type === 'upgrade') {
-        message = `আসসালামু আলাইকুম!\n\nআমি BizMind প্ল্যান আপগ্রেড করতে চাই।\n\n📱 বর্তমান প্ল্যান: ${currentTier}\n\nধন্যবাদ!`;
+        message = `আসসালামু আলাইকুম!\n\nআমি Munafa Zen প্ল্যান আপগ্রেড করতে চাই।\n\n📱 বর্তমান প্ল্যান: ${currentTier}\n\nধন্যবাদ!`;
     } else {
-        message = `আসসালামু আলাইকুম!\n\nBizMind App সম্পর্কে সাহায্য দরকার।\n\n📱 আমার প্ল্যান: ${currentTier}\n\nধন্যবাদ!`;
+        message = `আসসালামু আলাইকুম!\n\nMunafa Zen App সম্পর্কে সাহায্য দরকার।\n\n📱 আমার প্ল্যান: ${currentTier}\n\nধন্যবাদ!`;
     }
     
     window.open(`https://wa.me/8801700524647?text=${encodeURIComponent(message)}`, '_blank');
@@ -3681,7 +3681,7 @@ function contactViaCall() {
 
 function contactViaEmail() {
     const currentTier = AppState.userTier || 'STARTER';
-    const subject = encodeURIComponent('BizMind App Support');
+    const subject = encodeURIComponent('Munafa Zen App Support');
     const body = encodeURIComponent(`আসসালামু আলাইকুম!\n\nআমার প্ল্যান: ${currentTier}\n\n[আপনার সমস্যা লিখুন]\n\nধন্যবাদ!`);
     window.open(`mailto:botassist.org@gmail.com?subject=${subject}&body=${body}`, '_blank');
     closeContactModal();
