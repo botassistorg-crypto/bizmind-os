@@ -1650,9 +1650,6 @@ window.switchCustomerTab = function(tab) {
     }
 }
 
-// ============================================
-// ⚙️ VIEW: SETTINGS & MENU (Updated with Staff & Fixed Costs)
-// ============================================
 async function getSettingsHTML() {
     let config = { url: '', sheetId: '' };
     try {
@@ -1661,55 +1658,137 @@ async function getSettingsHTML() {
     } catch(e) {}
 
     return `
-        <div class="p-5 pb-24 space-y-6 animate-fade-in">
+        <div class="p-5 pb-24 space-y-4 animate-fade-in">
+            
             <!-- Header -->
             <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white"><i class="ph-bold ph-gear text-xl"></i></div>
-                <div><h2 class="text-xl font-bold text-slate-800">Menu</h2><p class="text-xs text-slate-500">Settings & Tools</p></div>
-            </div>
-
-            <!-- 1. BUSINESS -->
-            <button onclick="openModal('businessSettings')" class="w-full bg-white p-4 mb-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
-                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center"><i class="ph-bold ph-storefront text-xl"></i></div>
-                <div class="text-left"><h3 class="font-bold text-slate-700 text-sm">Shop Setup</h3><p class="text-[10px] text-slate-400">Name, Address, Rates</p></div></div><i class="ph-bold ph-caret-right text-slate-300"></i>
-            </button>
-
-            <!-- 2. STAFF & PAYROLL (New!) -->
-            <button onclick="openStaffModal()" class="w-full bg-white p-4 mb-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
-                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center"><i class="ph-bold ph-users-three text-xl"></i></div>
-                <div class="text-left"><h3 class="font-bold text-slate-700 text-sm">Staff & Payroll</h3><p class="text-[10px] text-slate-400">Manage Team</p></div></div><i class="ph-bold ph-caret-right text-slate-300"></i>
-            </button>
-
-            <!-- 3. FIXED COSTS (New!) -->
-            <button onclick="openFixedCostModal()" class="w-full bg-white p-4 mb-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
-                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center"><i class="ph-bold ph-lightning text-xl"></i></div>
-                <div class="text-left"><h3 class="font-bold text-slate-700 text-sm">Fixed Costs</h3><p class="text-[10px] text-slate-400">Rent, WiFi, Bills</p></div></div><i class="ph-bold ph-caret-right text-slate-300"></i>
-            </button>
-
-            <!-- 4. DATABASE -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 class="font-bold text-slate-700 mb-2 flex items-center gap-2"><i class="ph-duotone ph-cloud-arrow-up text-brand-600"></i> Cloud Backup</h3>
-                <form onsubmit="saveBackupConfig(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Google Sheet ID</label>
-                        <input type="text" name="sheetId" value="${config.sheetId}" placeholder="e.g. 1SK9el..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-600">
-                    </div>
-                    <button type="submit" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl shadow-lg active:scale-95">Connect & Sync</button>
-                </form>
-                <div class="grid grid-cols-2 gap-3 mt-4">
-                    <button onclick="performBackup()" class="bg-blue-50 text-blue-700 p-3 rounded-xl border border-blue-100 font-bold text-xs">Backup Now</button>
-                    <button onclick="performRestore()" class="bg-orange-50 text-orange-700 p-3 rounded-xl border border-orange-100 font-bold text-xs">Restore Data</button>
+                <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white">
+                    <i class="ph-bold ph-gear text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Menu</h2>
+                    <p class="text-xs text-slate-500">Settings & Tools</p>
                 </div>
             </div>
 
-            <!-- DANGER -->
-            <div class="pt-6 border-t border-slate-200">
-                <button onclick="hardResetApp()" class="w-full text-red-500 text-xs font-bold py-3 hover:bg-red-50 rounded-xl transition-colors">Reset App Data (Delete All)</button>
+            <!-- ============================================ -->
+            <!-- 🔐 ACCOUNT SECTION (At Top!) -->
+            <!-- ============================================ -->
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 p-4 rounded-xl text-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                        <i class="ph-bold ph-user text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-bold">BizMind User</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs px-2 py-0.5 rounded-full ${
+                                AppState.userTier === 'ELITE' ? 'bg-amber-500' :
+                                AppState.userTier === 'GROWTH' ? 'bg-purple-500' :
+                                'bg-slate-600'
+                            }">
+                                ${AppState.userTier === 'ELITE' ? '👑' : AppState.userTier === 'GROWTH' ? '⭐' : '🌱'} ${AppState.userTier || 'STARTER'}
+                            </span>
+                        </div>
+                    </div>
+                    <button onclick="handleLogout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                        Logout
+                    </button>
+                </div>
             </div>
+
+            <!-- ============================================ -->
+            <!-- ⚙️ SETTINGS BUTTONS -->
+            <!-- ============================================ -->
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-6">Settings</p>
+
+            <!-- 1. Shop Setup -->
+            <button onclick="openModal('businessSettings')" class="w-full bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center">
+                        <i class="ph-bold ph-storefront text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="font-bold text-slate-700 text-sm">Shop Setup</h3>
+                        <p class="text-[10px] text-slate-400">Name, Address, Rates</p>
+                    </div>
+                </div>
+                <i class="ph-bold ph-caret-right text-slate-300"></i>
+            </button>
+
+            <!-- 2. Staff & Payroll -->
+            <button onclick="openStaffModal()" class="w-full bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center">
+                        <i class="ph-bold ph-users-three text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="font-bold text-slate-700 text-sm">Staff & Payroll</h3>
+                        <p class="text-[10px] text-slate-400">Manage Team</p>
+                    </div>
+                </div>
+                <i class="ph-bold ph-caret-right text-slate-300"></i>
+            </button>
+
+            <!-- 3. Fixed Costs -->
+            <button onclick="openFixedCostModal()" class="w-full bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center">
+                        <i class="ph-bold ph-lightning text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="font-bold text-slate-700 text-sm">Fixed Costs</h3>
+                        <p class="text-[10px] text-slate-400">Rent, WiFi, Bills</p>
+                    </div>
+                </div>
+                <i class="ph-bold ph-caret-right text-slate-300"></i>
+            </button>
+
+            <!-- ============================================ -->
+            <!-- ☁️ CLOUD BACKUP -->
+            <!-- ============================================ -->
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-6">Cloud Backup</p>
+            
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="ph-duotone ph-cloud-arrow-up text-brand-600 text-xl"></i>
+                    <span class="text-xs text-slate-500">Google Sheet ID</span>
+                </div>
+                <form onsubmit="saveBackupConfig(event)" class="space-y-3">
+                    <input type="text" name="sheetId" value="${config.sheetId}" placeholder="e.g. 1SK9el..." 
+                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-600">
+                    <button type="submit" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95">
+                        Connect Database
+                    </button>
+                </form>
+                <div class="grid grid-cols-2 gap-3 mt-3">
+                    <button onclick="performBackup()" class="bg-blue-50 text-blue-700 p-2.5 rounded-xl border border-blue-100 font-bold text-xs">
+                        Backup Now
+                    </button>
+                    <button onclick="performRestore()" class="bg-orange-50 text-orange-700 p-2.5 rounded-xl border border-orange-100 font-bold text-xs">
+                        Restore Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- ⚠️ DANGER ZONE -->
+            <!-- ============================================ -->
+            <div class="mt-6 pt-4 border-t border-slate-200">
+                <button onclick="hardResetApp()" class="w-full text-red-400 text-xs font-medium py-3 hover:bg-red-50 rounded-xl transition-colors">
+                    ⚠️ Reset App Data (Delete All)
+                </button>
+            </div>
+
+            <!-- App Version -->
+            <div class="mt-4 text-center pb-4">
+                <p class="text-xs text-slate-400">BizMind v2.0</p>
+                <p class="text-[10px] text-slate-300">Made with ❤️ in Bangladesh</p>
+            </div>
+
         </div>
     `;
 }
-
 
 
 // ============================================
@@ -1731,85 +1810,6 @@ window.handleSaveVIPRule = async function(e) {
         closeModal();
         router('customers'); 
     }
-}
-
-// ============================================
-// ⚙️ VIEW: SETTINGS & MENU (Complete)
-// ============================================
-async function getSettingsHTML() {
-    let config = { url: '', sheetId: '' };
-    try {
-        const idSetting = await db.settings.get('sheet_id');
-        if(idSetting) config.sheetId = idSetting.value;
-    } catch(e) {}
-
-    return `
-        <div class="p-5 pb-24 space-y-6 animate-fade-in">
-            
-            <!-- Header -->
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white"><i class="ph-bold ph-gear text-xl"></i></div>
-                <div><h2 class="text-xl font-bold text-slate-800">Menu</h2><p class="text-xs text-slate-500">Settings & Tools</p></div>
-            </div>
-
-            <!-- 1. CONNECT DB -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 class="font-bold text-slate-700 mb-2 flex items-center gap-2"><i class="ph-duotone ph-cloud-arrow-up text-brand-600"></i> Cloud Backup</h3>
-                <p class="text-xs text-slate-500 mb-4 bg-slate-50 p-3 rounded-lg border border-slate-100">
-                    <b>Setup:</b> Create a blank Google Sheet, share with <b>botassist.org@gmail.com</b>, paste ID below.
-                </p>
-                <form onsubmit="saveBackupConfig(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Google Sheet ID</label>
-                        <input type="text" name="sheetId" value="${config.sheetId}" placeholder="e.g. 1SK9el..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-600 focus:border-brand-500 focus:outline-none">
-                    </div>
-                    <button type="submit" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl shadow-lg active:scale-95 transition-transform">Connect Database</button>
-                </form>
-            </div>
-
-            <!-- 2. SHOP SETUP -->
-            <button onclick="openModal('businessSettings')" class="w-full bg-white p-4 mb-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
-                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center"><i class="ph-bold ph-storefront text-xl"></i></div>
-                <div class="text-left"><h3 class="font-bold text-slate-700 text-sm">Shop Setup</h3><p class="text-[10px] text-slate-400">Name, Address, Rates</p></div></div><i class="ph-bold ph-caret-right text-slate-300"></i>
-            </button>
-
-            <!-- ✅ 3. CUSTOMER LIST (RESTORED BUTTON) -->
-            <button onclick="router('customers')" class="w-full bg-white p-4 mb-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center"><i class="ph-bold ph-users text-xl"></i></div>
-                    <div class="text-left"><h3 class="font-bold text-slate-700 text-sm">Customer List</h3><p class="text-[10px] text-slate-400">View VIPs & History</p></div>
-                </div>
-                <i class="ph-bold ph-caret-right text-slate-300"></i>
-            </button>
-
-            <!-- 4. STAFF MANAGER -->
-            <button onclick="openStaffModal()" class="w-full bg-white p-4 mb-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
-                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center"><i class="ph-bold ph-users-three text-xl"></i></div>
-                <div class="text-left"><h3 class="font-bold text-slate-700 text-sm">Staff & Payroll</h3><p class="text-[10px] text-slate-400">Manage Salaries</p></div></div><i class="ph-bold ph-caret-right text-slate-300"></i>
-            </button>
-
-            <!-- 5. FIXED COSTS -->
-            <button onclick="openFixedCostModal()" class="w-full bg-white p-4 mb-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between active:bg-slate-50 transition-colors">
-                <div class="flex items-center gap-3"><div class="w-10 h-10 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center"><i class="ph-bold ph-lightning text-xl"></i></div>
-                <div class="text-left"><h3 class="font-bold text-slate-700 text-sm">Fixed Costs</h3><p class="text-[10px] text-slate-400">Rent, WiFi, Bills</p></div></div><i class="ph-bold ph-caret-right text-slate-300"></i>
-            </button>
-
-            <!-- 6. BACKUP ACTIONS -->
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="performBackup()" class="bg-blue-50 text-blue-700 p-4 rounded-xl border border-blue-100 shadow-sm flex flex-col items-center gap-2 active:bg-blue-100">
-                    <i class="ph-bold ph-upload-simple text-2xl"></i><span class="font-bold text-xs">Backup Now</span>
-                </button>
-                <button onclick="performRestore()" class="bg-orange-50 text-orange-700 p-4 rounded-xl border border-orange-100 shadow-sm flex flex-col items-center gap-2 active:bg-orange-100">
-                    <i class="ph-bold ph-download-simple text-2xl"></i><span class="font-bold text-xs">Restore Data</span>
-                </button>
-            </div>
-
-            <!-- DANGER -->
-            <div class="pt-6 border-t border-slate-200">
-                <button onclick="hardResetApp()" class="w-full text-red-500 text-xs font-bold py-3 hover:bg-red-50 rounded-xl transition-colors">Reset App Data (Delete All)</button>
-            </div>
-        </div>
-    `;
 }
 
 // ============================================
@@ -2924,6 +2924,36 @@ window.runPayroll = async function() {
         closeModal(); router('dashboard');
     }
 }
+
+// ============================================
+// 🔐 LOGOUT FUNCTION
+// ============================================
+async function handleLogout() {
+    // Confirm logout
+    const confirmed = confirm('আপনি কি লগআউট করতে চান?');
+    
+    if (!confirmed) return;
+    
+    try {
+        // Clear session from database
+        await db.settings.delete('user_session');
+        
+        // Clear AppState
+        AppState.userTier = null;
+        AppState.userSession = null;
+        
+        // Show success message
+        alert('✅ সফলভাবে লগআউট হয়েছে!');
+        
+        // Reload to show login screen
+        location.reload();
+        
+    } catch (error) {
+        console.error('Logout error:', error);
+        alert('❌ লগআউট করতে সমস্যা হয়েছে।');
+    }
+}
+
 // APP STARTUP
 document.addEventListener('DOMContentLoaded', async () => {
     
