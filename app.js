@@ -1882,4 +1882,5 @@ async function setZone(zone) {
     // (Optional polish step)
     
     calculateTotal();
+
 }
