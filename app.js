@@ -2953,7 +2953,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function showLoginScreen() {
     document.getElementById('app-content').innerHTML = `
-        <div class="h-screen w-full bg-slate-900 flex flex-col items-center justify-center p-6 animate-fade-in">
+        <div class="min-h-screen w-full bg-slate-900 flex flex-col items-center justify-center p-6 animate-fade-in">
             <div class="w-24 h-24 bg-gradient-to-tr from-brand-600 to-purple-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-brand-500/20">
                 <i class="ph-bold ph-rocket text-5xl text-white"></i>
             </div>
@@ -2980,14 +2980,69 @@ function showLoginScreen() {
             </form>
             
             <div class="mt-8 text-center">
-                <p class="text-xs text-slate-600">Don't have a key?</p>
-                <a href="#" class="text-xs font-bold text-brand-500 hover:text-brand-400">Contact Support</a>
-            </div>
+    <p class="text-xs text-gray-400">Don't have a key?</p>
+    <a href="https://wa.me/8801700524647?text=I%20need%20a%20BizMind%20license%20key" 
+       target="_blank"
+       class="text-sm font-bold text-green-400 hover:text-green-300 flex items-center justify-center gap-2 mt-2">
+        <i class="ph ph-whatsapp-logo text-lg"></i>
+        Contact Support
+    </a>
+</div>
         </div>
     `;
-    // Hide nav
-    document.querySelector('nav').classList.add('hidden');
-    document.querySelector('header').classList.add('hidden');
+    
+    // Hide navigation
+    const nav = document.querySelector('nav');
+    const header = document.querySelector('header');
+    if (nav) nav.classList.add('hidden');
+    if (header) header.classList.add('hidden');
+    
+// ✅ Hide ALL floating elements on login screen
+const floatingElements = [
+    'floating-fab-container',
+    'floating-sync-btn',
+    'fab-menu',
+    'fab-backdrop',
+    'whatsapp-btn',
+    'whatsapp-float',
+    'contact-float',
+    'floating-contact-btn'
+];
+
+floatingElements.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+});
+
+// ✅ Fix white space - make entire page dark
+document.body.style.backgroundColor = '#0f172a';
+document.body.style.margin = '0';
+document.body.style.padding = '0';
+document.body.style.minHeight = '100vh';
+document.body.style.overflow = 'auto';
+
+// Fix app-content container
+const appContent = document.getElementById('app-content');
+if (appContent) {
+    appContent.style.backgroundColor = '#0f172a';
+    appContent.style.minHeight = '100vh';
+    appContent.style.margin = '0';
+    appContent.style.padding = '0';
+}
+
+// Hide header and nav completely
+const footer = document.querySelector('footer');
+
+if (header) header.style.display = 'none';
+if (nav) nav.style.display = 'none';
+if (footer) footer.style.display = 'none';
+    
+    // ✅ NEW: Also hide any elements with these classes
+    document.querySelectorAll('.floating-btn, .fab-container, .sync-button').forEach(el => {
+        el.style.display = 'none';
+    });
+
+
 }
 
 async function handleLogin(e) {
