@@ -252,6 +252,11 @@ async function renderView(viewName) {
         if (typeof OfferWizard !== 'undefined') OfferWizard.open();
         return;
     }
+
+if (viewName === 'ab_testing') {
+    if (typeof ABTesting !== 'undefined') ABTesting.open();
+    return;
+}
     
     // ═══════════════════════════════════════════════════════════
     // PAGE ROUTES - Show loading spinner, then load content
@@ -337,24 +342,14 @@ async function renderView(viewName) {
                 }
             }, 100);
             
-        } else if (viewName === 'ab_testing') {
-            html = getABTestingHTML();
-            setTimeout(() => {
-                if (typeof ABTesting !== 'undefined') {
-                    ABTesting.init('ab-testing-container');
-                } else {
-                    console.error('ABTesting not loaded yet!');
-                    document.getElementById('ab-testing-container').innerHTML = `
-                        <div class="text-center py-12 text-red-500">
-                            <i class="ph ph-warning text-4xl mb-2"></i>
-                            <p>Error: ABTesting লোড হয়নি</p>
-                            <button onclick="location.reload()" class="mt-4 bg-brand-600 text-white px-4 py-2 rounded-lg">
-                                Reload করুন
-                            </button>
-                        </div>
-                    `;
-                }
-            }, 100);
+         } else if (viewName === 'ab_testing') {
+            // Open A/B Testing as modal (don't change page)
+            if (typeof ABTesting !== 'undefined') {
+                ABTesting.open();
+            } else {
+                alert('❌ A/B Testing লোড হয়নি। Page reload করুন।');
+            }
+            return; // Exit function completely - don't render anything
             
 	} else if (viewName === 'bundle_suggester') {
     if (typeof BundleSuggester !== 'undefined') {
